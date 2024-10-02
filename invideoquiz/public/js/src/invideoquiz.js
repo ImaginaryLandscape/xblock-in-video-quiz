@@ -50,7 +50,18 @@ function InVideoQuizXBlock(runtime, element) {
             $.each(problemTimesMap, function (time, componentId) {
                 if (component.data('id').indexOf(componentId) !== -1) {
                     component.addClass('in-video-problem-wrapper');
-                    $('.xblock-student_view', component).append(extraVideoButton).addClass('in-video-problem').hide();
+                    // Create a 'continue' button for component
+                    let buttonElement = $(extraVideoButton);
+                    // Disable it and append it to the xblock
+                    buttonElement.prop('disabled', true);
+                    $('.xblock-student_view', component).append(buttonElement).addClass('in-video-problem').hide();
+
+                    // Set up a listener to re-enable the continue button when 'submit' is clicked.
+                    var submit_button = component.find('.submit').first();
+                    submit_button.on('click', function() {
+                        let continueButton = component.find('.in-video-continue').first();
+                        continueButton.prop('disabled', false);
+                   });
                 }
             });
         }
